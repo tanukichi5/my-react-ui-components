@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.4.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -54,11 +55,21 @@
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.3.4",
+    "@storybook/addon-console": "^1.2.3",
     "@storybook/addon-essentials": "^6.3.4",
+    "@storybook/addon-info": "^5.3.21",
+    "@storybook/addon-knobs": "^6.3.0",
     "@storybook/addon-links": "^6.3.4",
+    "@storybook/addon-storysource": "^6.3.4",
+    "@storybook/addon-viewport": "^6.3.4",
     "@storybook/node-logger": "^6.3.4",
     "@storybook/preset-create-react-app": "^3.2.0",
     "@storybook/react": "^6.3.4",
-    "gh-pages": "^3.2.3"
+    "@types/storybook__addon-actions": "^5.2.1",
+    "@types/storybook__addon-info": "^5.2.4",
+    "@types/storybook__addon-knobs": "^5.2.1",
+    "@types/storybook__react": "^5.2.1",
+    "gh-pages": "^3.2.3",
+    "react-docgen-typescript-loader": "^3.7.2"
   }
 }
