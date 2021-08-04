@@ -2,7 +2,7 @@ import React from 'react';
 // import {withDocs} from 'storybook-readme'
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import Sample from '../../components/sample'
-// import Readme from './README.md'
+import README from './README.md'
 
 export default {
   title: 'HOGE/Sample',//サイドバーに表示する名前 /スラッシュで区切ることで改装構造にできる
@@ -29,7 +29,13 @@ export default {
         type: 'color',
       }
     }
-  }
+  },
+  parameters: {
+    notes: { README },
+    docs: {
+      extractComponentDescription: ((_:any, { notes }:any) => notes?.README)
+    }
+  },
 } as ComponentMeta<typeof Sample>;
 
 /**
