@@ -49,7 +49,14 @@ export default {
 
 
 //ストーリーのテンプレートを作成
-const Template: ComponentStory<typeof Sample> = (args) => <Sample {...args} />
+const Template: ComponentStory<typeof Sample> = (args) => {
+  return (
+    <>
+      <p>てすと</p>
+      <Sample {...args} />
+    </>
+  )
+}
 
 /**
  * 
@@ -61,9 +68,18 @@ const Template: ComponentStory<typeof Sample> = (args) => <Sample {...args} />
  */
 
 
-
 //作成したテンプレートをbindして個別のストーリーを作成
 export const SampleComponent = Template.bind({})
+// export const Basic = () => {
+
+//  return (
+//    <>
+//      <p>てすと</p>
+//    </>
+//  )
+// }
+
+
 SampleComponent.args = {
   text: 'あああああ',
   color: "#f00"
