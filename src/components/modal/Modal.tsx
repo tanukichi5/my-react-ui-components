@@ -8,14 +8,13 @@ import { backFixed } from './helpers/backFixed'
 import { retainFocus } from './helpers/retainFocus'
 
 // import { css, keyframes } from '@emotion/react'
-import * as styles from ".//ModalStyle";
+import * as styles from "./ModalStyle";
 import './modal.css';
-
 export interface InjectedModalState {
   id: string;
   portalTarget?: string;
-  siteContent: string;
-  sethogeState?:any;
+  siteContent?: string;
+  setRootState?:any;
   expanded: boolean;
   backFixed?: boolean;
   clickOutsideClose?: boolean;
@@ -23,8 +22,8 @@ export interface InjectedModalState {
   "aria-hidden"?: boolean,
   tabindex?: number,
   domHide?: boolean,
-  cssAnimationType?: string,
-  modalSource?: boolean,
+  cssAnimationType?: string | null,
+  modalSourceHide?: boolean,
   customStyles?: any
 }
 
@@ -46,35 +45,33 @@ const Modal: React.FC<InjectedModalState> = (props) => {
     cssAnimationType: !(props.cssAnimationType === undefined) ? props.cssAnimationType : "animation",
     customStyles: !(props.customStyles === undefined) ? props.customStyles : {},
     domHide: !(props.domHide === undefined) ? props.domHide : true,
-    modalSource: true,
+    modalSourceHide: true,
     modalDOM: modalElement,
   });
 
   //モーダル枠のスタイル設定
   const modalStyle_container = !(modalState.customStyles.container === undefined)
   ? modalState.customStyles.container
-  : styles.modal
+  : styles.container
 
   //モーダルオーバーレイのスタイル設定
   const modalStyle_overlay = !(modalState.customStyles.overlay === undefined)
   ? modalState.customStyles.overlay
-  : styles.modal_overlay
+  : styles.overlay
 
 
   //propsが変更された場合
   useEffect(() => {
 
-    setModalState({
-      ...modalState,
-      id: props.id,
+    setModalState((currentState) => ({
+      ...currentState,
       expanded: props.expanded,
+      modalDOM: modalElement,
       clickOutsideClose: props.clickOutsideClose!,
       backFixed: props.backFixed!,
       domHide: props.domHide!,
-      // cssAnimationType: props.cssAnimationType!,
-      modalDOM: modalElement,
-      "aria-hidden": !props.expanded
-    })
+      "aria-hidden": !props.expanded,
+    }))
 
     // console.log(modalState.modalDOM.current)
     
@@ -84,7 +81,6 @@ const Modal: React.FC<InjectedModalState> = (props) => {
     props.clickOutsideClose,
     props.backFixed,
     props.domHide,
-    // props.cssAnimationType,
   ]);
   
 
@@ -92,8 +88,10 @@ const Modal: React.FC<InjectedModalState> = (props) => {
   //modalStateが変更された場合
   useEffect(() => {
 
+    console.log(!(modalState.cssAnimationType === null))
+
     //親要素のstateを変更
-    props.sethogeState({
+    props.setRootState({
       expanded: modalState.expanded
     })
 
@@ -104,12 +102,14 @@ const Modal: React.FC<InjectedModalState> = (props) => {
       console.log("開いた")
 
       //tabやescキーでのイベントを付与
-      if(!(handleOnKeydown === undefined))
+      if(!(handleOnKeydown === undefined)) {
         handleOnKeydown.addEvent()
+      }
 
       //モーダルの外側をクリックで閉じるイベントを付与
-      if(modalState.clickOutsideClose && !(handleOnClickOutSide === undefined))
+      if(modalState.clickOutsideClose && !(handleOnClickOutSide === undefined)) {
         handleOnClickOutSide.addEvent()
+      }
 
       //"transition"や"animation"終了時にDOMを非表示にするイベントを削除
       // if(!(domHideEvent === undefined))
@@ -118,26 +118,29 @@ const Modal: React.FC<InjectedModalState> = (props) => {
       //サイトのメイン部分をスクリーンリーダーなどから除外する
       siteContent.setAttribute('aria-hidden', "true") 
 
-      setModalState({
-        ...modalState,
-        modalSource: false,
-      })
+      setModalState((currentState) => ({
+        ...currentState,
+        modalSourceHide: false,
+      }))
       
     } else {
       //モーダルが閉じた時
       console.log("閉じた")
 
       //tabやescキーでのイベントを削除
-      if(!(handleOnKeydown === undefined))
+      if(!(handleOnKeydown === undefined)) {
         handleOnKeydown.removeEvent()
+      }
 
       //モーダルの外側をクリックで閉じるイベントを削除
-      if(modalState.clickOutsideClose && !(handleOnClickOutSide === undefined))
+      if(modalState.clickOutsideClose && !(handleOnClickOutSide === undefined)) {
         handleOnClickOutSide.removeEvent()
+      }
 
       //"transition"や"animation"終了時にDOMを非表示にするイベントを付与
-      if(!(domHideEvent === undefined)) 
+      if(!(domHideEvent === undefined) && !(modalState.cssAnimationType === null)) {
         domHideEvent.addEvent()
+      } 
 
       //サイトのメイン部分をスクリーンリーダーなどを有効にする
       siteContent.removeAttribute('aria-hidden')
@@ -190,16 +193,16 @@ const Modal: React.FC<InjectedModalState> = (props) => {
   const animationEndDomHide = useCallback((event) => {
     console.log("アニメーション終了")
 
-    setModalState({
-      ...modalState,
+    setModalState((currentState) => ({
+      ...currentState,
       expanded: false,
-      domHide: props.domHide!,
-      modalSource: true,
-    })
+      modalSourceHide: true,
+    }))
 
     //"transition"や"animation"終了時にDOMを非表示にするイベントを削除
-    if(!(domHideEvent === undefined))
-        domHideEvent.removeEvent()
+    if(!(domHideEvent === undefined) && !(modalState.cssAnimationType === null)) {
+      domHideEvent.removeEvent()
+    }
 
   }, [modalState.expanded]);
 
@@ -220,7 +223,7 @@ const Modal: React.FC<InjectedModalState> = (props) => {
 
   const domHideEvent = attachEvent(
     modalState.modalDOM.current,
-    cssAnimationType(modalState.cssAnimationType),
+    cssAnimationType(modalState.cssAnimationType!),
     animationEndDomHide
   );
   //------------------------------
@@ -229,16 +232,15 @@ const Modal: React.FC<InjectedModalState> = (props) => {
 
   //閉じる
   const closeModal = useCallback(() => {
-    setModalState({
-      ...modalState,
+    setModalState((currentState) => ({
+      ...currentState,
       expanded: false,
-      domHide: props.domHide!,
-      modalSource: false,
-    })
+      modalSourceHide: props.cssAnimationType === null,
+    }))
   }, []);
 
 
-  if (modalState.domHide && modalState.modalSource) return null
+  if (modalState.domHide && modalState.modalSourceHide) return null
 
   return (
     <ModalPortal portalTarget={modalState.portalTarget}>

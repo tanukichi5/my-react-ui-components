@@ -1,6 +1,6 @@
 import { css, keyframes } from '@emotion/react'
 
-const modalOpened = keyframes`
+const modalOpen = keyframes`
   0% {
       opacity: 0;
       visibility: visible;
@@ -11,7 +11,7 @@ const modalOpened = keyframes`
   }
 `
 
-const modalClosed = keyframes`
+const modalClose = keyframes`
   0% {
       opacity: 1;
       visibility: visible;
@@ -23,36 +23,32 @@ const modalClosed = keyframes`
 `
 
 //アコーディオン全体（wrapper）
-export const modal = css`
-  height: 100%;
-  left: 0;
-  overflow: hidden;
+export const container = css`
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
-  z-index: 100;
+  height: 100%;
+  overflow: hidden;
   opacity: 0;
   visibility: hidden;
-  transition: all .6s;
+  z-index: 100;
+  /* transition: all .3s; */
+  animation-duration: .3s;
+  animation-timing-function: ease-out;
+  animation-delay: 0s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
   &[aria-hidden="true"] {
-    animation-name: ${modalClosed};
-    animation-duration: .6s;
-    animation-timing-function: ease;
-    animation-delay: 0s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+    animation-name: ${modalClose};
 
     /* opacity: 0;
     visibility: hidden; */
 
   }
   &[aria-hidden="false"] {
-    animation-name: ${modalOpened};
-    animation-duration: .6s;
-    animation-timing-function: ease;
-    animation-delay: 0s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
+    animation-name: ${modalOpen};
+
 
     /* opacity: 1;
     visibility: visible; */
@@ -62,7 +58,7 @@ export const modal = css`
 
 
 
-export const modal_overlay = css`
+export const overlay = css`
   position: fixed;
   top: 0;
   left: 0;
@@ -73,7 +69,7 @@ export const modal_overlay = css`
   height: 100%;
   background: #000;
   opacity: 0.8;
-  z-index: 1;
+  z-index: -1;
 `;
 
 

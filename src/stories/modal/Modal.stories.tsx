@@ -122,7 +122,7 @@ const Template: ComponentStory<typeof Modal> = (args) => {
   return (
     <>
       <button onClick={modalToggle}>モーダル</button>
-      <Modal {...args} {...hogeState} sethogeState={sethogeState}>
+      <Modal {...args} {...hogeState} setRootState={sethogeState}>
         <div className="aaaa">
           <p>モーダル</p>
           <button onClick={modalToggle}>閉じる</button>
@@ -186,7 +186,7 @@ const customStyles = {
     z-index: 100;
     opacity: 0;
     visibility: hidden;
-    transition: all .6s;
+    /* transition: all .6s; */
     &[aria-hidden="true"] {
       opacity: 0;
       visibility: hidden;
@@ -218,7 +218,7 @@ ModalComponent_customStyle.args = {
   siteContent: '#root',
   clickOutsideClose: true,
   backFixed: true,
-  domHide:false,
+  // domHide:false,
   cssAnimationType: "transition",
   customStyles: customStyles,
 };
