@@ -8,7 +8,7 @@ import README from './README.md'
 import { css, keyframes } from '@emotion/react'
 
 export default {
-  title: 'Modal',//サイドバーに表示する名前 /スラッシュで区切ることで改装構造にできる
+  title: 'MODAL',//サイドバーに表示する名前 /スラッシュで区切ることで改装構造にできる
   component: Modal,//コンポーネントを指定
   //初期値
   args: {
