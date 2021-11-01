@@ -10,7 +10,7 @@ import TabPanel from '../../components/tab/TabPanel';
 
 import './tab.css';
 
-import README from './README.md'
+// import README from './README.md'
 
 export default {
   title: 'TAB',//サイドバーに表示する名前 /スラッシュで区切ることで改装構造にできる
@@ -37,7 +37,7 @@ export default {
     // }
   },
   parameters: {
-    notes: { README },
+    // notes: { README },
     docs: {
       extractComponentDescription: ((_:any, { notes }:any) => notes?.README)
     }

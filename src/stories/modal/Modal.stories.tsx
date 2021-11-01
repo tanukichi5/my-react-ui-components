@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 // import Sample from '../../components/sample'
 import Modal from '../../components/modal/Modal'
-import README from './README.md'
+// import README from './README.md'
 
 import { css, keyframes } from '@emotion/react'
 
@@ -82,7 +82,7 @@ export default {
 
   },
   parameters: {
-    notes: { README },
+    // notes: { README },
     docs: {
       extractComponentDescription: ((_:any, { notes }:any) => notes?.README)
     }

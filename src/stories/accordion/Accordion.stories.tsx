@@ -3,7 +3,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 // import Sample from '../../components/sample'
 import Accordion from '../../components/accordion/Accordion'
-import README from './README.md'
+// import README from 'README.md'
 
 export default {
   title: 'ACCORDION',//サイドバーに表示する名前 /スラッシュで区切ることで改装構造にできる
@@ -65,12 +65,12 @@ export default {
     //   }
     // }
   },
-  parameters: {
-    notes: { README },
-    docs: {
-      extractComponentDescription: ((_:any, { notes }:any) => notes?.README)
-    }
-  },
+  // parameters: {
+  //   notes: { README },
+  //   docs: {
+  //     extractComponentDescription: ((_:any, { notes }:any) => notes?.README)
+  //   }
+  // },
 } as ComponentMeta<typeof Accordion>;
 
 /**
