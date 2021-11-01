@@ -5,10 +5,10 @@ import React, {
   useRef,
   useContext,
 } from "react";
-import * as CSS from 'csstype';
+// import * as CSS from 'csstype';
 import { Context as accordionContext } from "./AccordionContext";
 
-import { css, SerializedStyles } from '@emotion/react'
+import { getPanelHeight } from './helpers/getPanelHeight'
 
 export interface Props {
   panelIndex: number
@@ -35,7 +35,11 @@ interface InjectedPanelAttributes {
 
 //panelStylesのインターフェース
 interface InjectedPanelStyles {
-  panel: SerializedStyles
+  height: any,
+  visibility: any,
+  boxSizing: any,
+  overflow: any,
+  transition: any
 }
 
 export const Context = createContext(
@@ -78,8 +82,6 @@ export const Provider: React.FC<Props> = (props) => {
     panelDOM: null,
   });
 
-  // console.log(itemState['index'])
-
   //開閉時のコールバック関数をセット
   const onOpen = rootContext.accordionState["onOpen"];
   const onClose = rootContext.accordionState["onClose"];
@@ -98,33 +100,28 @@ export const Provider: React.FC<Props> = (props) => {
   });
 
   //パネルのスタイル
-  // const [panelStyles, setPanelStyles] = useState<InjectedPanelStyles>({
-  //   height: itemState["isExpanded"] ? getPanelHeight(itemState.panelDOM) : 0,
-  //   visibility: itemState["isExpanded"] ? "visible" : "hidden",
-  //   boxSizing: "border-box",
-  //   overflow: "hidden",
-    // transition: rootContext.accordionState.notTransition
-    //   ? ""
-    //   : `height ${rootContext.accordionState.duration} ${rootContext.accordionState.easing}, visibility ${rootContext.accordionState.duration}`,
-  // });
-  const panelInitialStyles = css`
-      height: ${itemState["isExpanded"] ? getPanelHeight(itemState.panelDOM) : 0};
-      visibility: ${itemState["isExpanded"] ? "visible" : "hidden"};
-      box-sizing: border-box;
-      overflow: hidden;
-      transition: ${rootContext.accordionState.notTransition
-        ? ""
-        : "height " + rootContext.accordionState.duration + " " + rootContext.accordionState.easing + ", visibility " + rootContext.accordionState.duration};
-    `
+  // const panelInitialStyles:any = {
+  //     height: itemState["isExpanded"] ? getPanelHeight(itemState.panelDOM) : 0,
+  //     visibility: itemState["isExpanded"] ? "visible" : "hidden",
+  //     box-sizing: 'border-box',
+  //     overflow: 'hidden',
+  //     transition: rootContext.accordionState.notTransition
+  //       ? ""
+  //       : "height " + rootContext.accordionState.duration + " " + rootContext.accordionState.easing + ", visibility " + rootContext.accordionState.duration;
+  //     }
 
-  const [panelStyles, setPanelStyles] = useState<InjectedPanelStyles>({
-      panel: panelInitialStyles
-    }
-  );
+  const [panelStyles, setPanelStyles] = useState({
+    height: itemState["isExpanded"] ? getPanelHeight(itemState.panelDOM) : 0,
+    visibility: itemState["isExpanded"] ? "visible" : "hidden",
+    boxSizing: "border-box",
+    overflow: "hidden",
+    transition: rootContext.accordionState.notTransition
+      ? ""
+      : "height " + rootContext.accordionState.duration + " " + rootContext.accordionState.easing + ", visibility " + rootContext.accordionState.duration
+  });
 
   //アコーディオンの開閉状態が変更されたら発火
   useEffect(() => {
-    // if(!itemState['panelEl']) return
     
     if (renderFlgRef.current) {
       //トリガー
@@ -140,7 +137,8 @@ export const Provider: React.FC<Props> = (props) => {
       }));
       setPanelStyles((panelStyles) => ({
         ...panelStyles,
-        panel: panelInitialStyles
+        height: itemState["isExpanded"] ? getPanelHeight(itemState.panelDOM) : 0,
+        visibility: itemState["isExpanded"] ? "visible" : "hidden",
       }));
 
       //開閉時のコールバック関数実行
@@ -162,9 +160,9 @@ export const Provider: React.FC<Props> = (props) => {
     // console.log('パネルDOM取得')
     setPanelStyles((panelStyles) => ({
       ...panelStyles,
-      panel: panelInitialStyles
+      height: itemState["isExpanded"] ? getPanelHeight(itemState.panelDOM) : 0,
+      visibility: itemState["isExpanded"] ? "visible" : "hidden",
     }));
-    // console.log(rootContext.accordionState['expandedPanels'].has(itemState.index));
   }, [itemState["panelDOM"]]);
 
   //multipleExpandedの処理
@@ -187,7 +185,6 @@ export const Provider: React.FC<Props> = (props) => {
       renderFlgRefRoot.current = true;
     }
 
-    // console.log(rootContext.accordionState['expandedPanels'].has(itemState.index));
   }, [rootContext.accordionState["expandedPanels"]]);
 
   //開いているパネルの高さをwindowresize時に調整
@@ -196,7 +193,8 @@ export const Provider: React.FC<Props> = (props) => {
       if(itemState["isExpanded"]) {
         setPanelStyles((panelStyles) => ({
           ...panelStyles,
-          panel: panelInitialStyles
+          height: itemState["isExpanded"] ? getPanelHeight(itemState.panelDOM) : 0,
+          visibility: itemState["isExpanded"] ? "visible" : "hidden",
         }));
       }
     } else {
@@ -222,12 +220,5 @@ export const Provider: React.FC<Props> = (props) => {
   );
 };
 
-function getPanelHeight(panel:React.RefObject<HTMLInputElement> | null): string {
-  if (panel === null) return ""
-  // console.log(panel.current.children[0])
-  const panelHeight = !(panel.current === null) 
-    ? panel.current.children[0].clientHeight
-    : ""
-  return `${panelHeight}px`;
-}
+
 

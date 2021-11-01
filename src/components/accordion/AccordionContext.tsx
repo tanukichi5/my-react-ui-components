@@ -1,16 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState, createContext } from "react";
-import { useDebounceFn } from "../../utils/useDebounceFn";
+import { useDebounceFn } from "./helpers/useDebounceFn";
+import { attachEvent } from "./helpers/attachEvent";
 
-
-// const hoge = new Set();
-
-type Content = {
-  title: string
-  detail: string
+interface Props {
+  defaultExpandedPanels?: number[],
+  multipleExpanded?: boolean,
+  easing?: string,
+  duration?: string,
+  notTransition?: boolean,
+  onOpen?: (panel: React.RefObject<HTMLInputElement> | null) => void,
+  onClose?: (panel: React.RefObject<HTMLInputElement> | null) => void,
 }
-type Contents = Content[]
-
 //accordionStateのインターフェース
 export interface InjectedAccordionState {
   expandedPanels?: Set<unknown>;
@@ -22,7 +23,7 @@ export interface InjectedAccordionState {
   checkWindowResize?: number;
   onOpen?: (panel: React.RefObject<HTMLInputElement> | null) => void;
   onClose?: (panel: React.RefObject<HTMLInputElement> | null) => void;
-  content: Contents;
+  customStyles?: any
 }
 
 export const Context = createContext(
@@ -33,19 +34,24 @@ export const Context = createContext(
 );
 
 
-const Provider: React.FC = (props) => {
+const Provider: React.FC<Props> = (props) => {
 
   const [accordionState, setAccordionState] = useState<InjectedAccordionState>({
     expandedPanels: new Set(),
-    defaultExpandedPanels: [],
-    easing: "ease-out",
-    duration: ".3s",
-    notTransition: false,
-    multipleExpanded: true,
+    defaultExpandedPanels: props.defaultExpandedPanels ? props.defaultExpandedPanels : [],
+    easing: props.easing ? props.easing : "ease-out",
+    duration: props.duration ? props.duration : ".3s",
+    notTransition: props.notTransition ? props.notTransition : false,
+    multipleExpanded: props.multipleExpanded ? props.multipleExpanded : true,
     checkWindowResize: window.innerWidth,
-    onOpen: () => {},
-    onClose: () => {},
-    content: []
+    onOpen: props.onOpen ? props.onOpen : () => {},
+    onClose:  props.onClose ? props.onClose : () => {},
+    customStyles: {
+      root: undefined,
+      item: undefined,
+      trigger: undefined,
+      panel: undefined
+    }
   });
 
   //パネルの高さを揃えるリサイズイベント
@@ -83,13 +89,3 @@ const Provider: React.FC = (props) => {
 export default Provider;
 
 
-function attachEvent(element: any, type: any, listener: any, options?: any) {
-  return {
-    addEvent() {
-      element.addEventListener(type, listener, options);
-    },
-    removeEvent() {
-      element.removeEventListener(type, listener);
-    },
-  };
-}

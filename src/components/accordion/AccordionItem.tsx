@@ -1,22 +1,23 @@
 /** @jsxImportSource @emotion/react */
-import React from "react";
-import { Provider, Context } from "./ItemContext";
-
-import * as styles from "../../styles/AccordionStyle";
+import React, { useContext } from 'react'
+import { Provider, Context } from "./ItemContext"
+import { Context as  accordionContext} from "./AccordionContext"
 
 interface Props {
-  panelIndex: number
+  panelIndex?: any
 }
 
 const AccordionItem: React.FC<Props> = (props) => {
+  const rootContext = useContext(accordionContext)
   return (
     <Provider panelIndex={props.panelIndex}>
       <Context.Consumer>
-        {(options) => {
-          // console.log(options)
+        {() => {
           return (
             <>
-              <div css={styles.accordion_item}>{props.children}</div>
+              <div className="accordionItem">
+                {props.children}
+              </div>
             </>
           )
         }}
@@ -24,20 +25,5 @@ const AccordionItem: React.FC<Props> = (props) => {
     </Provider>
   );
 };
-// const AccordionItem = (props) => {
-//   return (
-//     <Provider panelIndex={props.panelIndex}>
-//       <Context.Consumer>
-//         {(options) => {
-//           return (
-//             <>
-//               <div className="AccordionItem">{props.children}</div>
-//             </>
-//           )
-//         }}
-//       </Context.Consumer>
-//     </Provider>
-//   );
-// };
 
 export default AccordionItem;
