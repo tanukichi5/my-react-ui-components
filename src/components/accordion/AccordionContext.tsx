@@ -19,7 +19,7 @@ export interface InjectedAccordionState {
   easing?: string;
   duration?: string;
   notTransition?: boolean;
-  multipleExpanded?: boolean;
+  multipleExpanded?: boolean | undefined;
   checkWindowResize?: number;
   onOpen?: (panel: React.RefObject<HTMLInputElement> | null) => void;
   onClose?: (panel: React.RefObject<HTMLInputElement> | null) => void;
@@ -42,7 +42,7 @@ const Provider: React.FC<Props> = (props) => {
     easing: props.easing ? props.easing : "ease-out",
     duration: props.duration ? props.duration : ".3s",
     notTransition: props.notTransition ? props.notTransition : false,
-    multipleExpanded: props.multipleExpanded ? props.multipleExpanded : true,
+    multipleExpanded: !(props.multipleExpanded === undefined) ? props.multipleExpanded : true,
     checkWindowResize: window.innerWidth,
     onOpen: props.onOpen ? props.onOpen : () => {},
     onClose:  props.onClose ? props.onClose : () => {},

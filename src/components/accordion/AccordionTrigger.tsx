@@ -11,9 +11,10 @@ const AccordionTrigger: React.FC = (props) => {
   //アコーディオンが開いているか？
   const itemExpanded = itemContext.itemState['isExpanded']
   
-  const toggleAccordion = () => {
-    // console.log(itemExpanded)
+  const toggleAccordion = (e:any) => {
 
+    e.preventDefault();
+    
     //アイテムの状態を変更
     itemContext.setItemState( itemState =>({
       ...itemState,

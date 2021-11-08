@@ -5,10 +5,30 @@ import logo from './logo.svg';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionPanel } from 'components/accordion/';
 
 function App() {
+
+  function hoge() {
+    console.log("aaaaaa")
+  }
+  function fuga(v:any) {
+    console.log(v)
+  }
   return (
     <div className="App">
 
-      <Accordion defaultExpandedPanels={[1, 2]} multipleExpanded={true}>
+      <Accordion defaultExpandedPanels={[3]} onOpen={hoge} onClose={fuga}>
+
+        <AccordionItem>
+          <div className="AccordionItem__header">
+            <AccordionTrigger>
+              あああああ
+            </AccordionTrigger>
+          </div>
+          <AccordionPanel>
+            <div className="AccordionPanel__content">
+              てすと
+            </div>
+          </AccordionPanel>
+        </AccordionItem>
 
         <AccordionItem>
           <div className="AccordionItem__header">
